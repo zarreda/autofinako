@@ -9,7 +9,7 @@ lint:
 	uv run mypy src/
 
 test-unit:
-	uv run pytest tests/unit/ -q --cov=src --cov-fail-under=85
+	uv run pytest tests/unit/ -q --cov=src --cov-fail-under=85 --cov-config=pyproject.toml
 
 test-integration:
 	uv run pytest tests/integration/ -m integration -q
