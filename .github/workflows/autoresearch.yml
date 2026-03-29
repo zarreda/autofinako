@@ -1,0 +1,24 @@
+name: Autoresearch
+
+on:
+  schedule:
+    - cron: '0 22 * * 1-5'   # weeknights at 22:00
+  workflow_dispatch:
+
+jobs:
+  research:
+    runs-on: self-hosted      # needs local LLM access
+    timeout-minutes: 480      # 8 hours max
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync
+      - name: Run autoresearch session
+        run: |
+          claude --no-permissions . \
+            --prompt "Read program.md and run a full autoresearch session."
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: experiment-results-${{ github.run_id }}
+          path: results/experiments.tsv
