@@ -76,6 +76,28 @@ class Settings(BaseSettings):
     chunk_overlap: int = Field(default=0, ge=0, description="Overlapping sentences between chunks")
     neutering_enabled: bool = Field(default=False, description="Enable entity neutering")
 
+    # ── Enhanced scoring stages (from efinako) ────────────────────────────
+    run_enhanced_sentiment: bool = Field(
+        default=True,
+        description="Run confidence-calibrated sentiment (always recommended)",
+    )
+    run_guidance: bool = Field(
+        default=True,
+        description="Run quantitative guidance detection stage",
+    )
+    run_horizon: bool = Field(
+        default=True,
+        description="Run multi-horizon time tagging stage",
+    )
+    run_section: bool = Field(
+        default=True,
+        description="Run speaker/section tagging stage",
+    )
+    run_tone_shift: bool = Field(
+        default=True,
+        description="Run cross-quarter tone shift detection stage",
+    )
+
     # ── Target variable ──────────────────────────────────────────────────
     target_variable: str = Field(
         default="oos_r_squared",

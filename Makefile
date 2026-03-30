@@ -6,7 +6,7 @@ install:
 lint:
 	uv run ruff check src/ tests/
 	uv run ruff format --check src/ tests/
-	uv run mypy src/
+	uv run mypy src/ --exclude '.venv'
 
 test-unit:
 	uv run pytest tests/unit/ -q --cov=src --cov-fail-under=85 --cov-config=pyproject.toml

@@ -69,6 +69,35 @@ chunk_overlap: 0
 # Examples: false (default), true (robustness testing)
 neutering_enabled: false
 
+# ── Enhanced scoring stages ───────────────────────────────────────────────────
+# These stages layer rich annotations on top of the base 5-stage pipeline.
+# Each can be toggled independently. Disabling stages speeds up scoring.
+
+# Confidence-calibrated sentiment: adds confidence (1-5) and magnitude
+# (strong/moderate/mild) to each sentence's sentiment label.
+# Always recommended — minimal cost, high value.
+run_enhanced_sentiment: true
+
+# Quantitative guidance detection: identifies specific numbers, ranges, or
+# percentages in management guidance ("revenue of $24-25B" vs "we expect growth").
+# Produces guidance_density and avg_specificity features.
+run_guidance: true
+
+# Multi-horizon time tagging: classifies statements as PAST, CURRENT,
+# NEAR_FUTURE (1-2 quarters), or FAR_FUTURE (3+ quarters).
+# Produces near_future_frac, far_future_frac features.
+run_horizon: true
+
+# Speaker & section tagging: distinguishes prepared remarks vs Q&A responses,
+# CEO vs CFO language, scripted vs spontaneous speech.
+# Produces qa_vs_prepared_gap feature.
+run_section: true
+
+# Cross-quarter tone shift: compares management tone vs previous quarter.
+# Requires prior-quarter data. Detects deterioration/improvement in outlook.
+# Produces tone_shift_score feature.
+run_tone_shift: true
+
 # ── Target variable ───────────────────────────────────────────────────────────
 # The variable the autoresearch loop optimises. This is the out-of-sample R²
 # of the best model — higher means the model generalises better on unseen data.
