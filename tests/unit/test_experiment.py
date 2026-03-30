@@ -23,13 +23,29 @@ class TestExperimentSignatures:
 
     def test_build_features_returns_dataframe(self) -> None:
         settings = Settings()
-        df = pl.DataFrame({"a": [1, 2, 3], "oos_r_squared": [0.1, 0.2, 0.3]})
+        df = pl.DataFrame(
+            {
+                "COMPANYID": [1, 1, 1],
+                "FYEAR": [2023, 2023, 2023],
+                "FQUARTER": [1, 2, 3],
+                "EPS": [1.0, 1.1, 1.2],
+                "oos_r_squared": [0.1, 0.2, 0.3],
+            }
+        )
         result = build_features(df, settings)
         assert isinstance(result, pl.DataFrame)
 
     def test_build_features_preserves_target_column(self) -> None:
         settings = Settings()
-        df = pl.DataFrame({"x": [1], "oos_r_squared": [0.5]})
+        df = pl.DataFrame(
+            {
+                "COMPANYID": [1],
+                "FYEAR": [2023],
+                "FQUARTER": [1],
+                "EPS": [1.0],
+                "oos_r_squared": [0.5],
+            }
+        )
         result = build_features(df, settings)
         assert "oos_r_squared" in result.columns
 
@@ -42,3 +58,15 @@ class TestExperimentSignatures:
         settings = Settings()
         result = score("Test context.", settings)
         assert -1.0 <= result <= 1.0
+
+    def test_score_positive_text(self) -> None:
+        settings = Settings()
+        result = score(
+            "Revenue growth was strong, exceeding expectations with record gains.", settings
+        )
+        assert result > 0
+
+    def test_score_negative_text(self) -> None:
+        settings = Settings()
+        result = score("Significant decline in margins with risk of further loss.", settings)
+        assert result < 0

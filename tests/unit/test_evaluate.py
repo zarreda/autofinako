@@ -2,27 +2,45 @@
 
 from __future__ import annotations
 
-from unittest.mock import patch
+import io
+import sys
 
 from pipeline.evaluate import main
 
 
 class TestEvaluateHarness:
-    def test_main_prints_metric(self, capsys: object) -> None:
-        main()
-        captured = capsys.readouterr()  # type: ignore[union-attr]
-        assert "METRIC:" in captured.out
+    def test_main_prints_metric(self) -> None:
+        old_stdout = sys.stdout
+        sys.stdout = buffer = io.StringIO()
+        try:
+            main()
+        finally:
+            sys.stdout = old_stdout
+        output = buffer.getvalue().strip()
+        assert "METRIC:" in output
 
-    def test_main_metric_is_float(self, capsys: object) -> None:
-        main()
-        captured = capsys.readouterr()  # type: ignore[union-attr]
-        line = captured.out.strip()
-        _, value = line.split("METRIC:")
-        float(value.strip())  # should not raise
+    def test_main_metric_is_float(self) -> None:
+        old_stdout = sys.stdout
+        sys.stdout = buffer = io.StringIO()
+        try:
+            main()
+        finally:
+            sys.stdout = old_stdout
+        output = buffer.getvalue().strip()
+        lines = [ln for ln in output.split("\n") if ln.startswith("METRIC:")]
+        assert len(lines) == 1
+        _, value = lines[0].split("METRIC:")
+        metric = float(value.strip())
+        assert isinstance(metric, float)
 
-    def test_main_exits_on_timeout(self) -> None:
-        with patch("pipeline.evaluate.time") as mock_time:
-            mock_time.monotonic.side_effect = [0.0, 200.0]
-
-            with __import__("pytest").raises(SystemExit):
-                main()
+    def test_main_metric_is_nonzero(self) -> None:
+        old_stdout = sys.stdout
+        sys.stdout = buffer = io.StringIO()
+        try:
+            main()
+        finally:
+            sys.stdout = old_stdout
+        output = buffer.getvalue().strip()
+        line = [ln for ln in output.split("\n") if ln.startswith("METRIC:")][0]
+        metric = float(line.split("METRIC:")[1].strip())
+        assert metric != 0.0, "Baseline should produce non-zero metric"

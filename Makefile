@@ -17,4 +17,4 @@ test-integration:
 test: lint test-unit test-integration
 
 eval:
-	uv run src/evaluate.py
+	uv run python -m pipeline.evaluate
