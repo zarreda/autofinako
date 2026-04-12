@@ -1,4 +1,4 @@
-.PHONY: install lint test-unit test-integration test eval
+.PHONY: install lint test-unit test-integration test eval dashboard
 
 install:
 	uv sync --all-extras
@@ -18,3 +18,6 @@ test: lint test-unit test-integration
 
 eval:
 	uv run python -m pipeline.evaluate
+
+dashboard:
+	uv run streamlit run dashboard/app.py

@@ -1,0 +1,21 @@
+timestamp	experiment_id	hypothesis	metric_before	metric_after	metric_delta	improved	status	duration_s	commit_sha	session_tag	notes
+2026-04-10T22:01:12+00:00	1	baseline: OLS on raw sentiment features	0.000000	0.013867	+0.013867	True	success	0.8	abc1234	apr10a	Initial baseline with keyword scoring
+2026-04-10T22:03:45+00:00	2	add rolling 4Q sentiment volatility feature	0.013867	0.018234	+0.004367	True	success	1.2	abc1235	apr10a	Volatility captures uncertainty signal
+2026-04-10T22:06:20+00:00	3	add sector-relative sentiment feature	0.018234	0.016891	-0.001343	False	success	1.1		apr10a	Reverted — sector-relative hurts on small universe
+2026-04-10T22:09:01+00:00	4	sentiment momentum + acceleration features	0.018234	0.024567	+0.006333	True	success	1.3	abc1236	apr10a	Momentum captures trend reversals
+2026-04-10T22:11:44+00:00	5	interaction: sentiment_momentum x eps_momentum	0.024567	0.028912	+0.004345	True	success	1.4	abc1237	apr10a	Interaction term significant at 5%
+2026-04-10T22:14:30+00:00	6	add LLM-LM disagreement as feature	0.028912	0.031245	+0.002333	True	success	1.2	abc1238	apr10a	Disagreement signals LLM contextual advantage
+2026-04-10T22:17:15+00:00	7	replace keyword scorer with TF-IDF cosine similarity	0.031245	0.027891	-0.003354	False	success	3.8		apr10a	Reverted — TF-IDF overfits on synthetic data
+2026-04-10T22:20:02+00:00	8	add confidence-weighted sentiment score	0.031245	0.035678	+0.004433	True	success	1.5	abc1239	apr10a	High-confidence sentences carry more signal
+2026-04-10T22:22:48+00:00	9	add guidance_count as predictor	0.035678	0.038012	+0.002334	True	success	1.3	abc123a	apr10a	More guidance = more information = better prediction
+2026-04-10T22:25:33+00:00	10	LASSO regularization instead of OLS	0.038012	0.033456	-0.004556	False	success	2.1		apr10a	Reverted — LASSO too aggressive, drops useful features
+2026-04-10T22:28:19+00:00	11	add near_future_frac / far_future_frac	0.038012	0.041234	+0.003222	True	success	1.4	abc123b	apr10a	Near-future focus = more actionable signal
+2026-04-10T22:31:05+00:00	12	add tone_shift_score from enhanced pipeline	0.041234	0.045678	+0.004444	True	success	1.6	abc123c	apr10a	Tone change is highly predictive — best improvement yet
+2026-04-10T22:33:51+00:00	13	add Q&A vs prepared remarks gap	0.045678	0.044123	-0.001555	False	success	1.5		apr10a	Reverted — Q&A gap noisy on synthetic data
+2026-04-10T22:36:37+00:00	14	winsorize features at 2%/98% instead of 1%/99%	0.045678	0.046234	+0.000556	True	success	1.1	abc123d	apr10a	Tighter winsorization slightly improves stability
+2026-04-10T22:39:23+00:00	15	add eps_momentum squared (non-linear)	0.046234	0.048912	+0.002678	True	success	1.3	abc123e	apr10a	Non-linear EPS momentum captures mean-reversion
+2026-04-11T22:01:00+00:00	16	ensemble: average 3 prompt variants	0.048912	0.042345	-0.006567	False	success	8.5		apr11a	Reverted — ensemble slower and worse on small data
+2026-04-11T22:05:30+00:00	17	few-shot: add 2 beat/miss examples to prompt	0.048912	0.051234	+0.002322	True	success	2.1	abc123f	apr11a	Few-shot helps calibrate scoring
+2026-04-11T22:08:15+00:00	18	chain-of-thought: ask for reasoning then score	0.051234	0.049876	-0.001358	False	success	4.2		apr11a	Reverted — CoT slower, no improvement on synthetic
+2026-04-11T22:11:00+00:00	19	add avg_specificity from guidance detection	0.051234	0.053456	+0.002222	True	success	1.4	abc1240	apr11a	Specific guidance = management confidence
+2026-04-11T22:13:45+00:00	20	rolling 8Q sentiment mean (smooth trend)	0.053456	0.054789	+0.001333	True	success	1.3	abc1241	apr11a	Longer window captures secular trends
